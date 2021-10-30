@@ -12,3 +12,6 @@ yarn-error.log
 
 # .gitkeep
 !/**/.gitkeep
+
+# Stryker
+/**/.stryker-tmp

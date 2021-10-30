@@ -9,7 +9,7 @@ module.exports = {
   concurrency: 4,
   checkers: [
     "typescript",
-    // "git-checker"
+    "git-checker"
   ],
   tsconfigFile: "tsconfig.json",
   mutate: ["src/**/*.ts?(x)"],
@@ -18,6 +18,6 @@ module.exports = {
   plugins: [
     "@stryker-mutator/jest-runner",
     "@stryker-mutator/typescript-checker",
-    // "stryker-git-checker"
+    "stryker-git-checker"
   ],
 };

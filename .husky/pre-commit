@@ -1,0 +1,17 @@
+#!/bin/sh
+
+echo "Applying linters"
+yarn lint
+
+if [ $? -ne 0 ]; then
+  echo "Please, format the code first."
+  exit 1
+fi
+
+echo "Unit testing"
+yarn test:unit
+
+if [ $? -ne 0 ]; then
+  echo "Some tests are failing."
+  exit 1
+fi

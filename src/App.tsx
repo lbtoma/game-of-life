@@ -1,9 +1,6 @@
 import type { FC } from "react";
+import Layout from "./components/Layout";
 
-const App: FC = () => (
-  <div>
-    <h1>Game of Life</h1>
-  </div>
-);
+const App: FC = () => <Layout>Todo</Layout>;
 
 export default App;

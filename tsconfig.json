@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "commonjs",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "@tests": ["tests/*"]
+    },
+    "rootDirs": ["src", "tests"],
+    "resolveJsonModule": true,
+    "allowJs": false,
+    "declaration": false,
+    "outDir": "dist",
+    "noEmit": true,
+    "downlevelIteration": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": false,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    "jsx": "react-jsx"
+  }
+}

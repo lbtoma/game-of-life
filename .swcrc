@@ -1,0 +1,47 @@
+{
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": true,
+      "decorators": false,
+      "dynamicImport": true
+    },
+    "transform": {
+      "react": {
+        "runtime": "automatic",
+        "throwIfNamespace": true,
+        "development": false,
+        "refresh": true
+      },
+      "optimizer": {
+        "globals": {
+          "vars": {
+            "__DEBUG__": "true"
+          }
+        }
+      }
+    },
+    "target": "es2015",
+    "loose": false,
+    "externalHelpers": false,
+    "keepClassNames": false,
+    "minify": {
+      "compress": true,
+      "mangle": true
+    },
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "@tests": ["tests/*"]
+    }
+  },
+  "module": {
+    "type": "commonjs",
+    "strict": false,
+    "strictMode": true,
+    "lazy": false,
+    "noInterop": false,
+    "ignoreDynamic": false
+  },
+  "minify": true
+}

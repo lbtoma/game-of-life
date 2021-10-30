@@ -1,0 +1,14 @@
+# Dependencies
+node_modules
+
+# Build
+dist
+
+# Test reports
+reports/**
+
+# Yarn logs
+yarn-error.log
+
+# .gitkeep
+!/**/.gitkeep

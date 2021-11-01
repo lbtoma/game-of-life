@@ -4,11 +4,6 @@ const plugins = [
   "@stryker-mutator/typescript-checker",
 ];
 
-if (process.env.STRYKER__ALL_MUTATIONS !== "true") {
-  checkers.push("git-checker");
-  plugins.push("stryker-git-checker");
-}
-
 /**
  * @type {import('@stryker-mutator/api/core').StrykerOptions}
  */
@@ -17,11 +12,10 @@ module.exports = {
   reporters: ["html", "clear-text", "progress"],
   testRunner: "jest",
   coverageAnalysis: "perTest",
-  concurrency: 4,
+  concurrency: process.env.STRYKER__SINGLE_PROCESS !== "true" ? 7 : 1,
   checkers,
   tsconfigFile: "tsconfig.json",
   mutate: ["src/**/*.ts?(x)"],
-  mutator: "typescript",
   disableBail: true,
   plugins,
 };

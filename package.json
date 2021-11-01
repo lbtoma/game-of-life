@@ -12,9 +12,10 @@
     "lint": "yarn prettier --end-of-line=lf --ignore-path .gitignore -c .",
     "format": "prettier --end-of-line=lf --ignore-path .gitignore --write -c .",
     "test:unit": "jest --passWithNoTests --no-cache --runInBand",
-    "test:mutation": "stryker run",
-    "test:mutation:full": "STRYKER__ALL_MUTATIONS=true stryker run",
-    "test:mutation:diffs": "STRYKER__ALL_MUTATIONS=false stryker run"
+    "test:mutation": "test:mutation:staged",
+    "test:mutation:full": "stryker run",
+    "test:mutation:staged": "stryker run --mutate $(node scripts/getRanges.js)",
+    "test:mutation:last-commit": "STRYKER__GIT_COMPARISON=\"HEAD^ HEAD\" stryker run --mutate $(node scripts/getRanges.js)"
   },
   "devDependencies": {
     "@stryker-mutator/core": "^5.4.1",

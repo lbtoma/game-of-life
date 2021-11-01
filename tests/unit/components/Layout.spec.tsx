@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import Layout from "@/components/Layout";
 
-describe("Layout.tsx", () => {
+describe("Layout component", () => {
   test("Should render the header correctly", () => {
     const layout = render(<Layout />);
 

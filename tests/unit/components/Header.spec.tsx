@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import Header from "@/components/Header";
 
-describe("Header.tsx", () => {
+describe("Header component", () => {
   test("Should render the header text correctly", () => {
     const header = render(<Header />);
 

@@ -25,10 +25,6 @@
     "loose": false,
     "externalHelpers": false,
     "keepClassNames": false,
-    "minify": {
-      "compress": true,
-      "mangle": true
-    },
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
@@ -43,5 +39,6 @@
     "noInterop": false,
     "ignoreDynamic": false
   },
-  "minify": true
+  "minify": false,
+  "sourceMaps": true
 }

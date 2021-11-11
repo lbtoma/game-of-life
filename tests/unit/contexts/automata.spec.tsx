@@ -103,4 +103,55 @@ describe("Automata context", () => {
       `${JSON.stringify(initialGeneration)},${JSON.stringify(worldSize)}`
     );
   });
+
+  test("Should handle the space boundary correctly", () => {
+    const automata = new Automata([
+      { x: 6, y: 0 },
+      { x: 7, y: 0 },
+      { x: 8, y: 0 },
+      { x: 0, y: 6 },
+      { x: 0, y: 7 },
+      { x: 0, y: 8 },
+      { x: 16, y: 127 },
+      { x: 17, y: 127 },
+      { x: 18, y: 127 },
+      { x: 127, y: 16 },
+      { x: 127, y: 17 },
+      { x: 127, y: 18 },
+    ]);
+
+    const nextGeneration = automata.next().value;
+
+    expect(nextGeneration.some(({ x, y }) => x === 7 && y === 0)).toBe(true);
+    expect(nextGeneration.some(({ x, y }) => x === 6 && y === 0)).toBe(false);
+    expect(nextGeneration.some(({ x, y }) => x === 8 && y === 0)).toBe(false);
+    expect(nextGeneration.some(({ x, y }) => x === 7 && y === 127)).toBe(true);
+    expect(nextGeneration.some(({ x, y }) => x === 7 && y === 1)).toBe(true);
+
+    expect(nextGeneration.some(({ x, y }) => y === 7 && x === 0)).toBe(true);
+    expect(nextGeneration.some(({ x, y }) => y === 6 && x === 0)).toBe(false);
+    expect(nextGeneration.some(({ x, y }) => y === 8 && x === 0)).toBe(false);
+    expect(nextGeneration.some(({ x, y }) => y === 7 && x === 127)).toBe(true);
+    expect(nextGeneration.some(({ x, y }) => y === 7 && x === 1)).toBe(true);
+
+    expect(nextGeneration.some(({ x, y }) => x === 17 && y === 127)).toBe(true);
+    expect(nextGeneration.some(({ x, y }) => x === 16 && y === 127)).toBe(
+      false
+    );
+    expect(nextGeneration.some(({ x, y }) => x === 18 && y === 127)).toBe(
+      false
+    );
+    expect(nextGeneration.some(({ x, y }) => x === 17 && y === 0)).toBe(true);
+    expect(nextGeneration.some(({ x, y }) => x === 17 && y === 126)).toBe(true);
+
+    expect(nextGeneration.some(({ x, y }) => y === 17 && x === 127)).toBe(true);
+    expect(nextGeneration.some(({ x, y }) => y === 16 && x === 127)).toBe(
+      false
+    );
+    expect(nextGeneration.some(({ x, y }) => y === 18 && x === 127)).toBe(
+      false
+    );
+    expect(nextGeneration.some(({ x, y }) => y === 17 && x === 0)).toBe(true);
+    expect(nextGeneration.some(({ x, y }) => y === 17 && x === 126)).toBe(true);
+  });
 });

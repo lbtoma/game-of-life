@@ -42,10 +42,12 @@ export class Automata implements Iterator<Lives, Lives> {
     let aliveTotal = 0;
     const isAlive = typeof indexInLives === "number";
 
+    this.processedCoordinates.add(`${coordinates.x},${coordinates.y}`);
+
     for (const { x, y } of NEIGHBORHOOD_RELATIVE_POSITIONS) {
       const neighbor: Coordinates = {
-        x: coordinates.x - (x % this.worldSize.x),
-        y: coordinates.y - (y % this.worldSize.y),
+        x: (coordinates.x - x + this.worldSize.x) % this.worldSize.x,
+        y: (coordinates.y - y + this.worldSize.y) % this.worldSize.y,
       };
 
       if (
@@ -60,11 +62,14 @@ export class Automata implements Iterator<Lives, Lives> {
       }
     }
 
-    if (aliveTotal === 3 || (isAlive && aliveTotal === 2)) {
+    if (
+      (aliveTotal === 3 || (isAlive && aliveTotal === 2)) &&
+      this.nextGeneration.every(
+        ({ x, y }) => x !== coordinates.x || y !== coordinates.y
+      )
+    ) {
       this.nextGeneration.push(coordinates);
     }
-
-    this.processedCoordinates.add(`${coordinates.x},${coordinates.y}`);
   };
 
   public next = () => {

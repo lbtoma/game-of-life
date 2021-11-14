@@ -2,6 +2,7 @@ import type { CSSProperties, FC } from "react";
 import Layout from "./components/Layout";
 import Matrix from "./components/Matrix";
 import { AutomataProvider, Lives } from "./contexts/Automata";
+import { TimeFlowProvider } from "./contexts/TimeFlow";
 
 const MATRIX_STYLE: CSSProperties = {
   width: "160vmin",
@@ -17,14 +18,16 @@ const INITIAL_GENERATION: Lives = [
 ];
 
 const App: FC = () => (
-  <AutomataProvider
-    worldSize={{ x: 254, y: 128 }}
-    initialGeneration={INITIAL_GENERATION}
-  >
-    <Layout>
-      <Matrix style={MATRIX_STYLE} />
-    </Layout>
-  </AutomataProvider>
+  <TimeFlowProvider>
+    <AutomataProvider
+      worldSize={{ x: 254, y: 128 }}
+      initialGeneration={INITIAL_GENERATION}
+    >
+      <Layout>
+        <Matrix style={MATRIX_STYLE} />
+      </Layout>
+    </AutomataProvider>
+  </TimeFlowProvider>
 );
 
 export default App;

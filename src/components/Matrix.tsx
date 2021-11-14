@@ -1,4 +1,5 @@
 import { Lives, useAutomata } from "@/contexts/Automata";
+import { useTimeFlow } from "@/contexts/TimeFlow";
 import { range } from "@/helpers/array";
 import { CSSProperties, FC, useEffect, useRef, useState } from "react";
 
@@ -6,21 +7,20 @@ export interface MatrixProps {
   style?: CSSProperties;
 }
 
-const INTERVAL = 50;
+const TICKS_PER_SECOND = 100;
+const PAUSE_DELAY = 3000;
 
 const Matrix: FC<MatrixProps> = ({ style }) => {
+  const timeFlow = useTimeFlow();
   const automata = useAutomata();
   const [lives, setLives] = useState<Lives>(automata.lives);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [matrixInterval, setMatrixInterval] = useState<NodeJS.Timer>();
 
   // Cold start
   useEffect(() => {
-    const interval = setInterval(
-      () => setLives(automata.next().value),
-      INTERVAL
-    );
-    setMatrixInterval(interval);
+    timeFlow.onNextTick = () => setLives(automata.next().value);
+    timeFlow.ticksPerSecond = TICKS_PER_SECOND;
+    timeFlow.start();
   }, []);
 
   // Mouse events
@@ -32,13 +32,13 @@ const Matrix: FC<MatrixProps> = ({ style }) => {
         e.preventDefault();
 
         if (e.buttons & 0b1) {
+          const rect = canvas.getBoundingClientRect();
+
           const x = Math.floor(
-            ((e.pageX - canvas.offsetLeft) / canvas.width) *
-              automata.worldSize.x
+            ((e.clientX - rect.left) / rect.width) * automata.worldSize.x
           );
           const y = Math.floor(
-            ((e.pageY - canvas.offsetTop) / canvas.height) *
-              automata.worldSize.y
+            ((e.clientY - rect.top) / rect.height) * automata.worldSize.y
           );
           const life = { x, y };
 
@@ -48,10 +48,7 @@ const Matrix: FC<MatrixProps> = ({ style }) => {
       };
 
       canvas.onmousedown = (e) => {
-        if (matrixInterval) {
-          clearInterval(matrixInterval);
-          setMatrixInterval(undefined);
-        }
+        if (timeFlow.isRunning) timeFlow.pause();
 
         canvas.onmousemove?.(e);
       };
@@ -59,17 +56,11 @@ const Matrix: FC<MatrixProps> = ({ style }) => {
       canvas.onmouseleave = (e) => {
         if (!(e.buttons & 0b1))
           setTimeout(() => {
-            const interval = setInterval(
-              () => setLives(automata.next().value),
-              INTERVAL
-            );
-            setMatrixInterval(interval);
-          }, INTERVAL * 16);
+            if (!timeFlow.isRunning) timeFlow.start();
+          }, PAUSE_DELAY);
       };
     }
-
-    return matrixInterval && (() => clearInterval(matrixInterval));
-  }, [matrixInterval, canvasRef]);
+  }, [canvasRef]);
 
   // Fix the DPI
   useEffect(() => {

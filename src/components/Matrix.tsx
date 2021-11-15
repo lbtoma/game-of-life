@@ -1,6 +1,7 @@
-import { Lives, useAutomata } from "@/contexts/Automata";
+import { useAutomata } from "@/contexts/Automata";
 import { useTimeFlow } from "@/contexts/TimeFlow";
 import { range } from "@/helpers/array";
+import { Lives } from "@/types";
 import { CSSProperties, FC, useEffect, useRef, useState } from "react";
 
 export interface MatrixProps {
@@ -10,13 +11,20 @@ export interface MatrixProps {
 const Matrix: FC<MatrixProps> = ({ style }) => {
   const timeFlow = useTimeFlow();
   const automata = useAutomata();
-  const [lives, setLives] = useState<Lives>(automata.lives);
+  const [lives, setLives] = useState<Readonly<Lives>>(automata.lives);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Cold start
   useEffect(() => {
-    timeFlow.onNextTick = () => setLives(automata.next().value);
+    timeFlow.onNextTick = () => {
+      automata.next();
+    };
   }, []);
+
+  // Lives change observer
+  useEffect(() => {
+    automata.onLivesChange = setLives;
+  }, [setLives]);
 
   // Mouse events
   useEffect(() => {
@@ -35,11 +43,9 @@ const Matrix: FC<MatrixProps> = ({ style }) => {
           const y = Math.floor(
             ((e.clientY - rect.top) / rect.height) * automata.worldSize.y
           );
-          const life = { x, y };
 
           if (x < automata.worldSize.x && y < automata.worldSize.y) {
-            automata.lives.push(life);
-            setLives((l) => [...l, life]);
+            automata.addLives([{ x, y }]);
           }
         }
       };

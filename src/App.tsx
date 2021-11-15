@@ -1,8 +1,9 @@
 import type { CSSProperties, FC } from "react";
 import Layout from "./components/Layout";
 import Matrix from "./components/Matrix";
-import { AutomataProvider, Lives } from "./contexts/Automata";
+import { AutomataProvider } from "./contexts/Automata";
 import { TimeFlowProvider } from "./contexts/TimeFlow";
+import { Lives } from "./types";
 
 const MATRIX_STYLE: CSSProperties = {
   width: "120vmin",

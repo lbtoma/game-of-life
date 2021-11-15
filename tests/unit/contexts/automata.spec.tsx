@@ -1,10 +1,5 @@
-import {
-  Automata,
-  AutomataProvider,
-  Coordinates,
-  Lives,
-  useAutomata,
-} from "@/contexts/Automata";
+import { Automata, AutomataProvider, useAutomata } from "@/contexts/Automata";
+import { Lives, Coordinates } from "@/types";
 import { render } from "@testing-library/react";
 import { FC } from "react";
 
@@ -153,5 +148,51 @@ describe("Automata context", () => {
     );
     expect(nextGeneration.some(({ x, y }) => y === 17 && x === 0)).toBe(true);
     expect(nextGeneration.some(({ x, y }) => y === 17 && x === 126)).toBe(true);
+  });
+
+  test("Should add lives correctly", () => {
+    const automata = new Automata();
+    const lives: Lives = [
+      { x: 1, y: 1 },
+      { x: 2, y: 2 },
+    ];
+    const onLivesChangeSpy = jest.spyOn(automata, "onLivesChange");
+
+    automata.addLives(lives);
+
+    expect(automata.lives).toStrictEqual(lives);
+    expect(onLivesChangeSpy).toBeCalledWith(lives);
+  });
+
+  test("Should remove lives correctly", () => {
+    const lives: Lives = [
+      { x: 1, y: 1 },
+      { x: 2, y: 2 },
+      { x: 3, y: 3 },
+    ];
+    const automata = new Automata(lives);
+    const onLivesChangeSpy = jest.spyOn(automata, "onLivesChange");
+
+    automata.removeLives([
+      { x: 2, y: 2 },
+      { x: 3, y: 3 },
+    ]);
+
+    expect(automata.lives).toStrictEqual([{ x: 1, y: 1 }]);
+    expect(onLivesChangeSpy).toBeCalledWith([{ x: 1, y: 1 }]);
+  });
+
+  test("Should clear lives correctly", () => {
+    const lives: Lives = [
+      { x: 1, y: 1 },
+      { x: 2, y: 2 },
+    ];
+    const automata = new Automata(lives);
+    const onLivesChangeSpy = jest.spyOn(automata, "onLivesChange");
+
+    automata.clearLives();
+
+    expect(automata.lives).toStrictEqual([]);
+    expect(onLivesChangeSpy).toBeCalledWith([]);
   });
 });

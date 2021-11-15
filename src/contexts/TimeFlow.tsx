@@ -13,7 +13,7 @@ export class TimeFlow {
   }
 
   get ticksPerSecond(): number {
-    return 1000 / this.tickPeriodMs;
+    return Math.round(1000 / this.tickPeriodMs);
   }
 
   set ticksPerSecond(ticksPerSecond: number) {

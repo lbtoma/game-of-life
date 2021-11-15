@@ -1,0 +1,37 @@
+.toolbar__container {
+  width: 80vw;
+  height: 2rem;
+  padding: 1rem;
+  background-color: rgba($color: #000000, $alpha: 0.4);
+  bottom: 0rem;
+  margin-top: 2rem;
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+}
+
+.toolbar__label {
+  margin-left: 2rem;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.toolbar__input {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.toolbar__button {
+  background-color: black;
+  border: solid 0.25rem black;
+  border-radius: 0.25rem;
+  color: white;
+  min-width: 10ch;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.toolbar__tick-rate-number {
+  max-width: 8ch;
+}

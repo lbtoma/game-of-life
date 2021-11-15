@@ -7,9 +7,6 @@ export interface MatrixProps {
   style?: CSSProperties;
 }
 
-const TICKS_PER_SECOND = 100;
-const PAUSE_DELAY = 3000;
-
 const Matrix: FC<MatrixProps> = ({ style }) => {
   const timeFlow = useTimeFlow();
   const automata = useAutomata();
@@ -19,8 +16,6 @@ const Matrix: FC<MatrixProps> = ({ style }) => {
   // Cold start
   useEffect(() => {
     timeFlow.onNextTick = () => setLives(automata.next().value);
-    timeFlow.ticksPerSecond = TICKS_PER_SECOND;
-    timeFlow.start();
   }, []);
 
   // Mouse events
@@ -28,10 +23,10 @@ const Matrix: FC<MatrixProps> = ({ style }) => {
     const canvas = canvasRef?.current;
 
     if (canvas) {
-      canvas.onmousemove = (e) => {
+      canvas.onmousedown = (e) => {
         e.preventDefault();
 
-        if (e.buttons & 0b1) {
+        if (e.buttons & 0b1 && !timeFlow.isRunning) {
           const rect = canvas.getBoundingClientRect();
 
           const x = Math.floor(
@@ -42,23 +37,14 @@ const Matrix: FC<MatrixProps> = ({ style }) => {
           );
           const life = { x, y };
 
-          automata.lives.push(life);
-          setLives((l) => [...l, life]);
+          if (x < automata.worldSize.x && y < automata.worldSize.y) {
+            automata.lives.push(life);
+            setLives((l) => [...l, life]);
+          }
         }
       };
 
-      canvas.onmousedown = (e) => {
-        if (timeFlow.isRunning) timeFlow.pause();
-
-        canvas.onmousemove?.(e);
-      };
-
-      canvas.onmouseleave = (e) => {
-        if (!(e.buttons & 0b1))
-          setTimeout(() => {
-            if (!timeFlow.isRunning) timeFlow.start();
-          }, PAUSE_DELAY);
-      };
+      canvas.onmousemove = canvas.onmousedown;
     }
   }, [canvasRef]);
 

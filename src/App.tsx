@@ -5,8 +5,8 @@ import { AutomataProvider, Lives } from "./contexts/Automata";
 import { TimeFlowProvider } from "./contexts/TimeFlow";
 
 const MATRIX_STYLE: CSSProperties = {
-  width: "160vmin",
-  height: "80vmin",
+  width: "120vmin",
+  height: "60vmin",
 };
 
 const INITIAL_GENERATION: Lives = [
@@ -20,7 +20,7 @@ const INITIAL_GENERATION: Lives = [
 const App: FC = () => (
   <TimeFlowProvider>
     <AutomataProvider
-      worldSize={{ x: 254, y: 128 }}
+      worldSize={{ x: 180, y: 90 }}
       initialGeneration={INITIAL_GENERATION}
     >
       <Layout>

@@ -3,6 +3,7 @@ import Layout from "./components/Layout";
 import Matrix from "./components/Matrix";
 import { AutomataProvider } from "./contexts/Automata";
 import { TimeFlowProvider } from "./contexts/TimeFlow";
+import { ToolsProvider } from "./contexts/Tools";
 import { Lives } from "./types";
 
 const MATRIX_STYLE: CSSProperties = {
@@ -21,12 +22,14 @@ const INITIAL_GENERATION: Lives = [
 const App: FC = () => (
   <TimeFlowProvider>
     <AutomataProvider
-      worldSize={{ x: 180, y: 90 }}
+      worldSize={{ x: 200, y: 100 }}
       initialGeneration={INITIAL_GENERATION}
     >
-      <Layout>
-        <Matrix style={MATRIX_STYLE} />
-      </Layout>
+      <ToolsProvider>
+        <Layout>
+          <Matrix style={MATRIX_STYLE} />
+        </Layout>
+      </ToolsProvider>
     </AutomataProvider>
   </TimeFlowProvider>
 );

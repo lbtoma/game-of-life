@@ -1,16 +1,29 @@
 import { useAutomata } from "@/contexts/Automata";
 import { useTimeFlow } from "@/contexts/TimeFlow";
+import { useTools } from "@/contexts/Tools";
 import { range } from "@/helpers/array";
-import { Lives } from "@/types";
+import { Coordinates, Lives } from "@/types";
 import { CSSProperties, FC, useEffect, useRef, useState } from "react";
 
 export interface MatrixProps {
   style?: CSSProperties;
 }
 
+export const getLifeCoordinates = (
+  e: MouseEvent,
+  rect: DOMRect,
+  worldSize: Coordinates
+): Coordinates | undefined => {
+  const x = Math.floor(((e.clientX - rect.left) / rect.width) * worldSize.x);
+  const y = Math.floor(((e.clientY - rect.top) / rect.height) * worldSize.y);
+
+  if (x < worldSize.x && y < worldSize.y) return { x, y };
+};
+
 const Matrix: FC<MatrixProps> = ({ style }) => {
   const timeFlow = useTimeFlow();
   const automata = useAutomata();
+  const tools = useTools();
   const [lives, setLives] = useState<Readonly<Lives>>(automata.lives);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -33,21 +46,12 @@ const Matrix: FC<MatrixProps> = ({ style }) => {
     if (canvas) {
       canvas.onmousedown = (e) => {
         e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
 
-        if (e.buttons & 0b1 && !timeFlow.isRunning) {
-          const rect = canvas.getBoundingClientRect();
-
-          const x = Math.floor(
-            ((e.clientX - rect.left) / rect.width) * automata.worldSize.x
-          );
-          const y = Math.floor(
-            ((e.clientY - rect.top) / rect.height) * automata.worldSize.y
-          );
-
-          if (x < automata.worldSize.x && y < automata.worldSize.y) {
-            automata.addLives([{ x, y }]);
-          }
-        }
+        tools.handleClick({
+          coordinates: getLifeCoordinates(e, rect, automata.worldSize),
+          buttonsSignal: e.buttons,
+        });
       };
 
       canvas.onmousemove = canvas.onmousedown;
@@ -114,7 +118,7 @@ const Matrix: FC<MatrixProps> = ({ style }) => {
     }
   }, [canvasRef, lives]);
 
-  return <canvas style={style} ref={canvasRef} />;
+  return <canvas data-testid="matrix" style={style} ref={canvasRef} />;
 };
 
 export default Matrix;

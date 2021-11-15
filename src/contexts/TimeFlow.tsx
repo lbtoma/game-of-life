@@ -17,7 +17,7 @@ export class TimeFlow {
   }
 
   set ticksPerSecond(ticksPerSecond: number) {
-    this.tickPeriodMs = Math.round(1000 / ticksPerSecond);
+    this.tickPeriodMs = 1000 / ticksPerSecond;
 
     if (!this.tickPeriodMs) throw "Too many ticks per second!";
     if (this.isRunning) this.start();

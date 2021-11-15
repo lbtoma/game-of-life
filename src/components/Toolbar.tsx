@@ -1,10 +1,17 @@
 import { useTimeFlow } from "@/contexts/TimeFlow";
-import { ChangeEvent, FC, useState } from "react";
+import { ToolOption, useTools } from "@/contexts/Tools";
+import { ChangeEvent, CSSProperties, FC, useState } from "react";
+
+const ACTIVE_OPTION_STYLE: CSSProperties = { color: "orange" };
 
 const Toolbar: FC = () => {
   const timeFlow = useTimeFlow();
+  const tools = useTools();
   const [ticksPerSecond, setTicksPerSecond] = useState(timeFlow.ticksPerSecond);
   const [isRunning, setIsRunning] = useState(timeFlow.isRunning);
+  const [toolOption, setToolOption] = useState(tools.currentOption);
+
+  tools.onToolChange = setToolOption;
 
   const onStartStopClick = () => {
     isRunning ? timeFlow.pause() : timeFlow.start();
@@ -48,6 +55,30 @@ const Toolbar: FC = () => {
         value={ticksPerSecond}
         onChange={onTicksPerSecondChange}
       />
+      <button
+        data-testid="add-life-button"
+        className="toolbar__button"
+        onClick={() => {
+          tools.currentOption = ToolOption.PUT_LIFE;
+        }}
+        style={
+          (toolOption === ToolOption.PUT_LIFE && ACTIVE_OPTION_STYLE) || {}
+        }
+      >
+        +
+      </button>
+      <button
+        data-testid="remove-life-button"
+        className="toolbar__button"
+        onClick={() => {
+          tools.currentOption = ToolOption.DELETE_LIFE;
+        }}
+        style={
+          (toolOption === ToolOption.DELETE_LIFE && ACTIVE_OPTION_STYLE) || {}
+        }
+      >
+        -
+      </button>
     </div>
   );
 };
